@@ -55,10 +55,10 @@ def validity(board, row, column, new_row, new_column):
 def move(board, row, column, new_row, new_column):
     
     #print the new chess board
-    print(board[row][column])
+   
     board[new_row][new_column] = board[row][column]
     board[row][column] = '[]'
-    print(board)
+    
     
 # convert user input into board indexes
 def process_move(piece):
@@ -73,7 +73,20 @@ def process_move(piece):
     else:
         return -1, -1
     
+# Create chess rules 
+# Define a function that ensures the pawns moves according to rules
+# Function must ensure pawn doesn't move backwards
+# Function must ensure pawn only moves one space at a time
+
+def pawn(board, piece, row, column, new_row, new_column):
+    if board[row][column] == '♟︎' and new_column == column and new_row == row + 1:
+        return True
+    else:
+        return 0
+    #need to reference this in the game function 
+         
     
+# Function for the main game 
 
 def game():
     print('Welcome to the Chess game!')
@@ -98,10 +111,10 @@ def game():
             #Let the player choose the square they want to move too
             new_position = input(" Where would you like to move to?:")            
             new_row, new_column = process_move(new_position)
-            print(row, column, new_row, new_column)
+           
         
             if row==-1 or column==-1 or new_row==-1 or new_column==-1:
-                print("Hey no bad!")
+                print("Invalid board position, Try again!")
             else:
                 break
             
@@ -120,5 +133,5 @@ def game():
             else:
                     player_turn = "White"
         else:
-            print("not valid")
+            print("Not Valid")
 game()
