@@ -11,6 +11,21 @@ Created on Tue Jul 11 14:05:35 2023
 # 2. Commit the changes (e.g. `git commit -m "commit message"`)
 # 3. Push the changes to GitHub (`git push`)
 
+"""This is a function that creates a game of chess.
+The function assumes that each player will only move their own pieces and will 
+not attack their own pieces. 
+
+The function assumes a player will only move their piece if the path is clear
+for them to do so.
+
+The function does not take into account any special moves.
+
+The function does not account for stalemate. 
+
+Further, the function assumes if a king is no longer present on the board one of the 
+players checkmate must have performed a checkmate correctly, and therefore, the game 
+is over. """
+
 
 board_dim = 8
 letters = [' a', 'b', 'c','d','e','f','g','h']
@@ -74,19 +89,27 @@ def process_move(piece):
         return -1, -1
     
 # Create chess rules 
-# Define a function that ensures the pawns moves according to rules
-# Function must ensure pawn doesn't move backwards
-# Function must ensure pawn only moves one space at a time
+# Function that enforces the rules for pawn
 
 def pawn(board, row, column, new_row, new_column):
-    if board[row][column] == '♟︎' and new_column == column and new_row == row + 1:
+    if board[row][column] == '♟︎': 
+        if row == 1 and new_row == row + 2 and new_column == column:
             return True
-    elif board[row][column] == '♙' and new_column == column and new_row == row - 1:
+        elif row == 1 and new_row == row + 1 and new_column == column:
+            return True
+        elif new_row == row + 1 and new_column == column:
+            return True
+    elif board[row][column] == '♙':
+        if row == 6 and new_row == row - 1 and new_column == column:
+            return True
+        elif row == 6 and new_row == row - 2 and new_column == column:
+            return True
+        elif new_row == row + 1:
             return True
     else:
         return False
 
-# Define a function that enforces the rules for a rook
+# Function that enforces the rules for a rook
 
 def rook(board, row, column, new_row, new_column) :
     if board[row][column] == '♜' or board[row][column] == '♖':
@@ -95,8 +118,7 @@ def rook(board, row, column, new_row, new_column) :
         else:
             return False
 
-    
-    
+      
 # Function that enforces the rules for the king
 
 def king(board, row, column, new_row, new_column):
@@ -159,7 +181,22 @@ def queen(board, row, column, new_row, new_column):
            return False
         
        
+# Function that checks if theres a clear path 
+
+def clear(board, row, column, new_row, new_column):
+    pass      
+
+# Function that checks for checkmate
+
+def checkmate(board):
+    for i in range(board_dim):
+        for j in range(board_dim):
+            if board[i][j] != '♚' or board[i][j] != '♔':
+                return True
+            
         
+
+# Function that checks for stalemate
        
         
 # Function that checks which chess rules need to be checked
@@ -178,7 +215,7 @@ def chess_rules(board, row, column, new_row, new_column):
     if board[row][column] == '♕' or board[row][column] == '♛':
         return queen(board, row, column, new_row, new_column)
         
-# Function that ensures the pieces are only moving if theres a clear path        
+       
     
 # Function for the main game 
 
@@ -222,8 +259,11 @@ def game():
               
             print(" Moving piece from [", piece, "] to [", new_position,"]")
                         
-                        
-                #Switch players
+            if checkmate(board):
+                print(f" Checkmate! Game Over {player_turn} Wins!")
+                return
+                
+            #Switch players
             if player_turn == "White":
                     player_turn = "Black"
             else:
@@ -231,8 +271,7 @@ def game():
         else:
             print("Not Valid")
 
-            ##define a global rules function that i can put in the game function that checks the 
-            # variable and then based on which variable it is it runs it through that function
+         
         
        
             
