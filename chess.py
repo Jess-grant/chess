@@ -78,12 +78,59 @@ def process_move(piece):
 # Function must ensure pawn doesn't move backwards
 # Function must ensure pawn only moves one space at a time
 
-def pawn(board, piece, row, column, new_row, new_column):
+def pawn(board, row, column, new_row, new_column):
     if board[row][column] == '♟︎' and new_column == column and new_row == row + 1:
-        return True
+            return True
+    elif board[row][column] == '♙' and new_column == column and new_row == row - 1:
+            return True
     else:
-        return 0
-    #need to reference this in the game function 
+        return False
+
+# Define a function that enforces the rules for a rook
+
+def rook(board, row, column, new_row, new_column) :
+    if board[row][column] == '♜' and new_column == column:
+        return True
+    elif board[row][column] == '♜' and new_row == row:
+        return True
+   
+    elif board[row][column] == '♖' and new_column == column:
+        return True
+    elif board[row][column] == '♖' and new_row == row:
+        return True
+    else: 
+        return False
+    
+# Function that enforces the rules for the king
+
+def king(board, row, column, new_row, new_column):
+    if board[row][column] == '♔' or board[row][column] == '♚':
+        if abs(new_column - column) == 1 and new_row - row == 0:
+            return True
+        elif abs(new_row - row) == 1 and new_column - column == 0:
+            return True
+        else:
+            return False
+                                      
+# Function that enforces the rules for knight 
+
+def knight(board, row, column, new_row, new_column):
+    if board[row][column] == '♘' or board[row][column] == '♞':
+        pass       
+
+
+# Function that checks which chess rules need to be checked
+
+def chess_rules(board, row, column, new_row, new_column):
+    if board[row][column] == '♟︎' or board[row][column] == '♙':
+        return pawn(board, row, column, new_row, new_column)
+    if board[row][column] == '♜' or board[row][column] == '♖':
+        return rook(board, row, column, new_row, new_column)
+    if board[row][column] == '♔' or board[row][column] == '♚':
+        return king(board, row, column, new_row, new_column)
+    if board[row][column] == '♘' or board[row][column] == '♞':
+        return knight(board, row, column, new_row, new_column)
+        
          
     
 # Function for the main game 
@@ -116,8 +163,10 @@ def game():
             if row==-1 or column==-1 or new_row==-1 or new_column==-1:
                 print("Invalid board position, Try again!")
             else:
-                break
-            
+                if chess_rules(board, row, column, new_row, new_column):
+                    
+                    break
+                print(" That move breaks chess rules, try again!")
             
         if validity(board, row, column, new_row, new_column):
             
@@ -134,4 +183,10 @@ def game():
                     player_turn = "White"
         else:
             print("Not Valid")
+
+            ##define a global rules function that i can put in the game function that checks the 
+            # variable and then based on which variable it is it runs it through that function
+        
+       
+            
 game()
