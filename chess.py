@@ -191,7 +191,7 @@ def queen(board, row, column, new_row, new_column):
 # Function that checks if theres a clear path 
 
 def clear(board, row, column, new_row, new_column):
-    pass      
+    pass  # Currently N/A    
 
 # Function that checks for checkmate
 
@@ -215,7 +215,7 @@ def checkmate(board):
         
 
 # Function that checks for stalemate
-       
+  # Currently N/A     
         
 # Function that checks which chess rules need to be verified
 
