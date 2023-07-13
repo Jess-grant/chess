@@ -89,17 +89,13 @@ def pawn(board, row, column, new_row, new_column):
 # Define a function that enforces the rules for a rook
 
 def rook(board, row, column, new_row, new_column) :
-    if board[row][column] == '♜' and new_column == column:
-        return True
-    elif board[row][column] == '♜' and new_row == row:
-        return True
-   
-    elif board[row][column] == '♖' and new_column == column:
-        return True
-    elif board[row][column] == '♖' and new_row == row:
-        return True
-    else: 
-        return False
+    if board[row][column] == '♜' or board[row][column] == '♖':
+        if new_row == row or new_column == column:
+            return True
+        else:
+            return False
+
+    
     
 # Function that enforces the rules for the king
 
@@ -109,6 +105,8 @@ def king(board, row, column, new_row, new_column):
             return True
         elif abs(new_row - row) == 1 and new_column - column == 0:
             return True
+        elif abs(new_row - row) == 1 and abs(new_column - column) == 1:
+            return True
         else:
             return False
                                       
@@ -116,9 +114,54 @@ def king(board, row, column, new_row, new_column):
 
 def knight(board, row, column, new_row, new_column):
     if board[row][column] == '♘' or board[row][column] == '♞':
-        pass       
+        if new_column == column + 2 or new_column == column - 2:
+            if new_row == row + 1 or new_row == row - 1:
+                return True
+            else:
+                return False
+            return True
+        
+        elif new_column == column + 1 or new_column == column - 1:
+            if new_row == row + 2 or new_row == row - 2:
+                return True
+            return True
+        else:
+            return False
+  
+        
+  
+# Function that enforces the rules for bishop
+
+def bishop(board, row, column, new_row, new_column):
+    if board[row][column] == '♗' or board[row][column] == '♝':
+        if abs(new_column - column) == abs(new_row - row):
+            return True
+        else: 
+            return False
 
 
+
+# Function that enforces the rules for queen
+
+def queen(board, row, column, new_row, new_column):
+    if board[row][column] == '♕' or board[row][column] == '♛':
+       if abs(new_column - column) == 1 and new_row - row == 0:
+           return True
+       elif abs(new_row - row) == 1 and new_column - column == 0:
+           return True
+       elif abs(new_row - row) == 1 and abs(new_column - column) == 1:
+           return True
+       elif new_row == row or new_column == column:
+           return True
+       elif abs(new_column - column) == abs(new_row - row):
+           return True
+       else:
+           return False
+        
+       
+        
+       
+        
 # Function that checks which chess rules need to be checked
 
 def chess_rules(board, row, column, new_row, new_column):
@@ -130,8 +173,12 @@ def chess_rules(board, row, column, new_row, new_column):
         return king(board, row, column, new_row, new_column)
     if board[row][column] == '♘' or board[row][column] == '♞':
         return knight(board, row, column, new_row, new_column)
+    if board[row][column] == '♗' or board[row][column] == '♝':
+        return bishop(board, row, column, new_row, new_column)
+    if board[row][column] == '♕' or board[row][column] == '♛':
+        return queen(board, row, column, new_row, new_column)
         
-         
+# Function that ensures the pieces are only moving if theres a clear path        
     
 # Function for the main game 
 
