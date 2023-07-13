@@ -5,11 +5,6 @@ Created on Tue Jul 11 14:05:35 2023
 @author: jessi
 """
 
-# To commit and push do:
-# 0. If you made changes elsewhere do `git pull` to start
-# 1. Add the files you want to track (e.g. `git add chess.py`)
-# 2. Commit the changes (e.g. `git commit -m "commit message"`)
-# 3. Push the changes to GitHub (`git push`)
 
 """This is a function that creates a game of chess.
 The function assumes that each player will only move their own pieces and will 
@@ -23,12 +18,14 @@ The function does not take into account any special moves.
 The function does not account for stalemate. 
 
 Further, the function assumes if a king is no longer present on the board one of the 
-players checkmate must have performed a checkmate correctly, and therefore, the game 
+players must have performed checkmate correctly, and therefore, the game 
 is over. """
 
 
 board_dim = 8
 letters = [' a', 'b', 'c','d','e','f','g','h']
+
+
         
 def chess_board():
            return [['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'],
@@ -55,7 +52,7 @@ def print_board(board):
             print(board[i][j], end = " ")
         print()
         
-# function that checks if a move is valid
+# Function that checks if a move is valid
 def validity(board, row, column, new_row, new_column):
     
     # check that the row and col are within the range
@@ -65,7 +62,7 @@ def validity(board, row, column, new_row, new_column):
         return False
     
 
-# a function that moves the piece (assumes it is valid)
+# Function that moves the piece (assumes it is valid)
 
 def move(board, row, column, new_row, new_column):
     
@@ -75,7 +72,7 @@ def move(board, row, column, new_row, new_column):
     board[row][column] = '[]'
     
     
-# convert user input into board indexes
+# Convert user input into board indexes
 def process_move(piece):
     # takes in the user input string
     # returns row and column they asked for, as integers
@@ -89,26 +86,36 @@ def process_move(piece):
         return -1, -1
     
 # Create chess rules 
+
 # Function that enforces the rules for pawn
 
 def pawn(board, row, column, new_row, new_column):
     if board[row][column] == '♟︎': 
-        if row == 1 and new_row == row + 2 and new_column == column:
+        if row == 1 and new_row == row + 2 and new_column == column and board[new_row][new_column] == '[]':
             return True
-        elif row == 1 and new_row == row + 1 and new_column == column:
+        elif row == 1 and new_row == row + 1 and new_column == column and board[new_row][new_column] == '[]':
             return True
-        elif new_row == row + 1 and new_column == column:
+        elif new_row == row + 1 and new_column == column and board[new_row][new_column] == '[]':
+            return True
+        elif new_row == row + 1 and new_column == column + 1 and board[new_row][new_column] != '[]':
+            return True
+        elif new_row == row + 1 and new_column == column - 1 and board[new_row][new_column] != '[]':
             return True
     elif board[row][column] == '♙':
-        if row == 6 and new_row == row - 1 and new_column == column:
+        if row == 6 and new_row == row - 2 and new_column == column and board[new_row][new_column] == '[]':
             return True
-        elif row == 6 and new_row == row - 2 and new_column == column:
+        elif row == 6 and new_row == row - 1 and new_column == column and board[new_row][new_column] == '[]':
             return True
-        elif new_row == row + 1:
+        elif new_row == row - 1 and new_column == column and board[new_row][new_column] == '[]':
+            return True
+        elif new_row == row - 1 and new_column == column + 1 and board[new_row][new_column] != '[]':
+            return True
+        elif new_row == row - 1 and new_column == column - 1 and board[new_row][new_column] != '[]':
             return True
     else:
         return False
-
+    
+    
 # Function that enforces the rules for a rook
 
 def rook(board, row, column, new_row, new_column) :
@@ -189,17 +196,28 @@ def clear(board, row, column, new_row, new_column):
 # Function that checks for checkmate
 
 def checkmate(board):
+    has_king_black = False
+    has_king_white = False
     for i in range(board_dim):
         for j in range(board_dim):
-            if board[i][j] != '♚' or board[i][j] != '♔':
-                return True
+            if board[i][j] == '♚': 
+                has_king_black = True
+            elif board[i][j] == '♔':
+                has_king_white = True
+                               
+    if has_king_black and not has_king_white:
+        return "Black"
+    elif has_king_white and not has_king_black:
+        return "White"
+    
+    return False
             
         
 
 # Function that checks for stalemate
        
         
-# Function that checks which chess rules need to be checked
+# Function that checks which chess rules need to be verified
 
 def chess_rules(board, row, column, new_row, new_column):
     if board[row][column] == '♟︎' or board[row][column] == '♙':
@@ -258,9 +276,10 @@ def game():
             move(board, row, column, new_row, new_column)
               
             print(" Moving piece from [", piece, "] to [", new_position,"]")
-                        
-            if checkmate(board):
-                print(f" Checkmate! Game Over {player_turn} Wins!")
+                    
+            check_result = checkmate(board)
+            if check_result=="White" or check_result=="Black":
+                print(f" Checkmate! Game Over {check_result} Wins!")
                 return
                 
             #Switch players
@@ -269,10 +288,7 @@ def game():
             else:
                     player_turn = "White"
         else:
-            print("Not Valid")
-
-         
-        
+            print("Not Valid")   
        
             
 game()
